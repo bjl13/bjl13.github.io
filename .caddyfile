@@ -1,0 +1,53 @@
+# Caddyfile
+
+# Primary Business Domain
+bjl13.com {
+    root * /var/www/bjl13com
+    file_server
+
+    # Enable Gzip Compression
+    encode gzip
+
+    # Security Headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; object-src 'none'"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        X-Frame-Options "DENY"
+    }
+
+    # Logging
+    log {
+        output file /var/log/caddy/bjl13com.access.log {
+            roll_size 10mb
+            roll_keep 5
+            roll_keep_for 14d
+        }
+    }
+}
+
+# Community/Informational Domain
+# bjl13.org {
+    # Redirect to the primary domain
+ #    redir https://bjl13.com{uri}
+# }
+
+# Optional: If bjl13.org has its own content, replace the redirect with:
+bjl13.org {
+    root * /var/www/bjl13org
+    file_server
+    encode gzip
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+		 
+		# Logging
+    log {
+        output file /var/log/caddy/bjl13org.access.log {
+            roll_size 10mb
+            roll_keep 5
+            roll_keep_for 14d
+        }
+    }
+}
